@@ -13,11 +13,11 @@ export default function Universities() {
    const [selection, setSelection] = useState(null);
    const dispatch = useDispatch();
    const university = useSelector(selectUniversity);
+
    function handleRadio(e){
       e.preventDefault();
       setSelection(e.target.value);
    }
-
 
    function validateInput(selection, handleError, universities, next){
 
@@ -57,7 +57,6 @@ export default function Universities() {
    return (
       <div className="content">
          <h2>What universities are you interested in?</h2>
-
       <RadioGroup className="selection" /* value={value} */ onChange={(e) => handleRadio(e)}>
          <FormControlLabel className="option" value="university" control={<Radio color="primary"/>} 
             label={
