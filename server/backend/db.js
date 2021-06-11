@@ -5,7 +5,8 @@ var con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: process.env.REACT_APP_SQL_PASS,
-  // port:"3300"
+  port:"3300",
+  database: "admissionpal_db"
 });
 
 con.connect(function(err) {
