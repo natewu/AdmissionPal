@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 09, 2021 at 03:17 PM
+-- Generation Time: Jun 10, 2021 at 11:42 PM
 -- Server version: 5.5.45
 -- PHP Version: 7.3.13
 
@@ -64,7 +64,17 @@ INSERT INTO `majors` (`Major_ID`, `Name_ID`, `Uni_ID`, `Admission_Avg`, `Extra_I
 (30, 2, 5, '90%', 'Approximate Admission Range: Low 90s,There is a written component to the U of C computer science application,Required Courses:,English Language Arts 30-1,Mathematics 31,Three other approved courses'),
 (31, 3, 5, '0', ''),
 (32, 4, 5, '0', ''),
-(33, 5, 5, '0', '');
+(33, 5, 5, '0', ''),
+(34, 1, 6, '95%*', 'Half of students with a 95% average were accepted into software engineering at Waterloo,Required Courses:,Mathematics 30-1,Mathematics 31,Chemistry 30,Physics 30,English Language Arts 30-1'),
+(35, 2, 6, '90%*', 'From the low 90s students are individually selected based on their application,Required Courses:,Mathematics 30-1,Mathematics 31,English Language Arts 30-1'),
+(36, 3, 6, '0', ''),
+(37, 4, 6, '0', ''),
+(38, 5, 6, '0', ''),
+(41, 1, 7, '80%*', 'Cut-off is \"low 80s\" for engineering,Required Courses:,Mathematics 30-1,Mathematics 31,Chemistry 30,Physics 30,English Language Arts 30-1'),
+(42, 2, 7, '80%*', 'Cut-off is \"low 80s\",Bachelor of Arts (BA) and Science (BSc) both offered,BA Requirements:,English Language Arts 30-1,Math 30-1 or Math 30-1,Math 31 Recommended,BSc Requirements:,English Language Arts 30-1,Chemistry 30 OR Physics 30,Math 30-1 or Math 30-2,Math 31 Recommended'),
+(43, 3, 7, '0', ''),
+(44, 4, 7, '0', ''),
+(45, 5, 7, '0', '');
 
 -- --------------------------------------------------------
 
@@ -105,11 +115,13 @@ CREATE TABLE `universities` (
 --
 
 INSERT INTO `universities` (`Uni_ID`, `Uni_Name`, `Uni_Info`) VALUES
-(1, 'University of Calgary', 'Average calculated from Top 5 approved 30 level courses including program prerequisites'),
-(2, 'McGill University', 'Average calculated from Top 5 approved 30 level courses including program prerequisites'),
+(1, 'University of Calgary', 'Average calculated from Top 5 approved 30 level courses including program prerequisites,Admission is solely marks-based'),
+(2, 'McGill University', 'Average calculated from Top 5 approved 30 level courses including program prerequisites,Admission is solely marks-based'),
 (3, 'Carleton University', 'Grade ranges apply to the overall and prerequisite average.'),
 (4, 'Mount Royal University', 'Average calculated from top 2 Group A subjects'),
-(5, 'University of Toronto', 'Average calculated from Top 5 approved 30 level courses');
+(5, 'University of Toronto', 'Average calculated from Top 5 approved 30 level courses'),
+(6, 'University of Waterloo', 'Average calculated from Top 5 approved 30 level courses,Admission is holistic'),
+(7, 'York University', 'Average calculated from Top 5 approved 30 level courses');
 
 --
 -- Indexes for dumped tables
@@ -143,19 +155,19 @@ ALTER TABLE `universities`
 -- AUTO_INCREMENT for table `majors`
 --
 ALTER TABLE `majors`
-  MODIFY `Major_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `Major_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `major_names`
 --
 ALTER TABLE `major_names`
-  MODIFY `Name_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `Name_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `universities`
 --
 ALTER TABLE `universities`
-  MODIFY `Uni_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `Uni_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
@@ -165,8 +177,8 @@ ALTER TABLE `universities`
 -- Constraints for table `majors`
 --
 ALTER TABLE `majors`
-  ADD CONSTRAINT `majors_ibfk_2` FOREIGN KEY (`Uni_ID`) REFERENCES `universities` (`Uni_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `majors_ibfk_1` FOREIGN KEY (`Name_ID`) REFERENCES `major_names` (`Name_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `majors_ibfk_1` FOREIGN KEY (`Name_ID`) REFERENCES `major_names` (`Name_ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `majors_ibfk_2` FOREIGN KEY (`Uni_ID`) REFERENCES `universities` (`Uni_ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
