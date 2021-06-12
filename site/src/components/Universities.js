@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import {TextField, RadioGroup, FormControlLabel, Radio, Button} from "@material-ui/core"
 import ChipInput from 'material-ui-chip-input'
 import { useHistory } from "react-router";
@@ -10,6 +10,7 @@ export default function Universities() {
    const next = useCallback(() => history.push('/majors'), [history]);
    const [universities, setUniversities] = useState([])
    const [error, setError] = useState(null);
+   const uniRef = useRef()
    const [selection, setSelection] = useState(null);
    const dispatch = useDispatch();
    const university = useSelector(selectUniversity);
@@ -54,15 +55,20 @@ export default function Universities() {
       return null;
    }
 
+   const AutoSelect = (chips) =>{
+      setUniversities(chips);
+      setSelection("university");
+   }
+
    return (
       <div className="content">
          <h2>What universities are you interested in?</h2>
       <RadioGroup className="selection" /* value={value} */ onChange={(e) => handleRadio(e)}>
-         <FormControlLabel className="option" value="university" control={<Radio color="primary"/>} 
+         <FormControlLabel className="option" ref={uniRef} value="university" control={<Radio color="primary"/>} 
             label={
             <ChipInput
                defaultValue={university !== null ? university.universities : ""}
-               onChange={(chips) => setUniversities(chips)}
+               onChange={(chips) => AutoSelect(chips)}
             />
             } 
          />

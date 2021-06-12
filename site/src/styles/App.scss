@@ -38,3 +38,23 @@
         margin: 1rem;
     }
 }
+
+.content__results{
+    padding: 1rem;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    @media (min-width:600px) {
+        margin: 1rem 4vw;
+    }
+    @media (max-width:600px) {
+        margin: 0 0rem;
+    }
+    flex: 1;
+    .results__table{
+        // display: flex;
+        flex: 1;
+        flex-flow: column;
+    }
+}
+

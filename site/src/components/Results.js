@@ -1,13 +1,44 @@
 import React, { useEffect, useState } from 'react'
+import { DataGrid } from '@material-ui/data-grid';
 import { useSelector } from "react-redux";
 import { selectMajor, selectUniversity } from "../utils/data";
 
 function Results() {
-
+   const [loading, setLoading] = useState(true);
+   const [fetchU, setFetchU] = useState(false);
    const selectedU = useSelector(selectUniversity);
    const selectedM = useSelector(selectMajor);
 
+   const [filterU, setFilterU] = useState([]);
+   var filterM = [];
+
    const [uni, setUni] = useState([]);
+   const [majors, setMajors] = useState([]);
+
+   function search(indexer, indexed, returnHook ){
+      var results = [];
+      for(var selection = 0; selection < indexer.universities.length; selection++){
+         for(var filter = 0; filter < indexed.length; filter++){
+            if(indexed[filter].university === indexer.universities[selection]) {
+               results.push(indexed[filter].university);
+               console.log(indexed[filter].university, indexer.universities[selection]);
+            }
+            else{
+               console.log("nothing");
+            }
+         }
+      }
+      if(results.length !== 0){
+         setLoading(false);
+         returnHook(
+            results.map((res, index) => ({
+               id: index,
+               university: res
+            }))
+         );
+         console.log("loading done")
+      }
+   }
 
    useEffect(() => {
       fetch("universities")
@@ -16,23 +47,37 @@ function Results() {
          setUni(
             uni.map((uni) => ({
                id: uni.Uni_ID,
-               name: uni.Uni_Name
+               university: uni.Uni_Name
             }))
          )
-      ));
+      ))
+      .then(() => setFetchU(true))
    }, [])
 
-   // useEffect(() => {
-   //    console.log(selectedU.universities)
-   // }, [])
+   useEffect(() => {
+      search(selectedU, uni, setFilterU)  
+   }, [fetchU])
 
-   return (
-      <div>
-         {uni.map((uni) => 
-            <li>{uni.name}</li>
-         )}
-         {selectedU ? <li>{selectedU.universities}</li> : <p>you haven't selected any universities!</p>}
+   const columns = [
+      { field: 'university', headerName: 'University', width: 200 },
+      { field: 'major', headerName: 'Major', width: 130 },
+      { field: 'avg', headerName: 'Admission Average', width: 200 },
+      { field: 'courses', headerName: 'Required Courses', width: 200 },
+   ]
+
+   return !loading ? (
+      <div className="content__results">
+         <h2>Results</h2>
+         {selectedU ? 
+         <div className="results__table">
+            <DataGrid rows={filterU} columns={columns} pageSize={5}/>
+         </div> 
+         : <p>you haven't selected any universities!</p>}
+         
       </div>
+   )
+   : (
+      <div> loading </div>
    )
 }
 

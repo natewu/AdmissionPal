@@ -32,7 +32,7 @@ export default function Majors() {
          {university.type === "selection" ? 
          <h2 className="majors">What major(s) from {
             university.universities.map(university => 
-               <em>{university}, </em>
+               <em key={university}>{university}, </em>
             ) 
          }are you interested in?</h2>
          : <h2> What major(s) are you interested in? </h2>
