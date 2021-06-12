@@ -10,7 +10,7 @@ function Results() {
    const selectedM = useSelector(selectMajor);
 
    const [filterU, setFilterU] = useState([]);
-   var filterM = [];
+   var [filterM, setFilterM] = useState([]);
 
    const [uni, setUni] = useState([]);
    const [majors, setMajors] = useState([]);
@@ -19,9 +19,9 @@ function Results() {
       var results = [];
       for(var selection = 0; selection < indexer.universities.length; selection++){
          for(var filter = 0; filter < indexed.length; filter++){
-            if(indexed[filter].university === indexer.universities[selection]) {
+            if(indexed[filter].university.toLowerCase() === indexer.universities[selection].toLowerCase()) {
                results.push(indexed[filter].university);
-               console.log(indexed[filter].university, indexer.universities[selection]);
+               // console.log(indexed[filter].university, indexer.universities[selection]);
             }
             else{
                console.log("nothing");
@@ -37,6 +37,9 @@ function Results() {
             }))
          );
          console.log("loading done")
+      }
+      else{
+         setLoading(false);
       }
    }
 
@@ -68,6 +71,7 @@ function Results() {
    return !loading ? (
       <div className="content__results">
          <h2>Results</h2>
+         {selectedU.universities.length === filterU.length ? null : <p>Some universities you have searched were not included in the results as they were not found on our database.</p>}
          {selectedU ? 
          <div className="results__table">
             <DataGrid rows={filterU} columns={columns} pageSize={5}/>
