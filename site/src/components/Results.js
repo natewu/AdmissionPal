@@ -5,23 +5,61 @@ import { selectMajor, selectUniversity } from "../utils/data";
 
 function Results() {
    const [loading, setLoading] = useState(true);
-   const [fetchU, setFetchU] = useState(false);
+   const [fetchStatus, setFetchStatus] = useState(false);
+   const [filterStatus, setFilterStatus] = useState(false);
    const selectedU = useSelector(selectUniversity);
    const selectedM = useSelector(selectMajor);
 
    const [filterU, setFilterU] = useState([]);
-   var [filterM, setFilterM] = useState([]);
+   const [filterM, setFilterM] = useState([]);
+   const [filteredResults, setFilteredResults] = useState([]);
 
    const [uni, setUni] = useState([]);
    const [majors, setMajors] = useState([]);
+   const [majorTypes, setMajorsTypes] = useState([]);
 
-   function search(indexer, indexed, returnHook ){
+   useEffect(() => {
+      const getData = async () => {
+         await fetch("universities")
+         .then(res => res.json())
+         .then((uni) => (
+            setUni(
+               uni.map((uni) => ({
+                  id: uni.Uni_ID,
+                  university: uni.Uni_Name,
+                  info: uni.Uni_Info
+               }))
+            )
+         ))
+         .then(() =>
+            fetch("majors/types")
+            .then(res => res.json())
+            .then((type) => (
+               setMajorsTypes(
+                  type.map((type) => ({
+                     id: type.Name_ID,
+                     major: type.Major_Name
+                  }))
+               )
+            ))
+            .then(() => {setFetchStatus(true)})
+            // .then(() => console.log(filterU))
+         )
+         
+      }
+      getData();
+   }, [])
+
+   function search(indexer, indexed, type, returnHook ){
       var results = [];
-      for(var selection = 0; selection < indexer.universities.length; selection++){
+      for(var selection = 0; selection < indexer.length; selection++){
          for(var filter = 0; filter < indexed.length; filter++){
-            if(indexed[filter].university.toLowerCase() === indexer.universities[selection].toLowerCase()) {
-               results.push(indexed[filter].university);
-               // console.log(indexed[filter].university, indexer.universities[selection]);
+            if(indexed[filter][type].toLowerCase() === indexer[selection].toLowerCase()) {
+               results.push({
+                  [type]: indexed[filter][type],
+                  info: indexed[filter].info
+               });
+               // console.log(indexed[filter].university, indexer[selection]);
             }
             else{
                console.log("nothing");
@@ -30,42 +68,79 @@ function Results() {
       }
       if(results.length !== 0){
          setLoading(false);
-         returnHook(
-            results.map((res, index) => ({
-               id: index,
-               university: res
-            }))
-         );
-         console.log("loading done")
+         switch(type){
+            case "university":
+               returnHook(
+                  results.map((res, index) => ({
+                     id: index,
+                     university: res.university,
+                     info: res.info
+                  }))
+               );
+               break;
+            case "major":
+               returnHook(
+                  results.map((res, index) => ({
+                     id: index,
+                     major: res.major,
+                  }))
+               );
+               break;
+
+            default:
+               return null
+         }
+         // console.log(results)
+         console.log("loading done " + type)
       }
       else{
          setLoading(false);
       }
    }
 
-   useEffect(() => {
-      fetch("universities")
-      .then(res => res.json())
-      .then((uni) => (
-         setUni(
-            uni.map((uni) => ({
-               id: uni.Uni_ID,
-               university: uni.Uni_Name
-            }))
-         )
-      ))
-      .then(() => setFetchU(true))
-   }, [])
+   function combine(parent, child, setFilter){
+      var result = [];
+      for(var item = 0; item < parent.length; item++){
+         for(var index = 0; index < child.length; index++){
+            
+            result[index] = {
+               ...parent[index],
+               major: child[index].major
+            }
+            console.log(result[index])
+         }
+      }
+      setFilter(result);
+      // console.log(filteredResults)
+      return result;
+   }
+
+   function filter(){
+      search(selectedU.universities, uni, "university", setFilterU);
+      search(selectedM.majors, majorTypes, "major", setFilterM); 
+   }
 
    useEffect(() => {
-      search(selectedU, uni, setFilterU)  
-   }, [fetchU])
+      if(fetchStatus){
+         filter()
+         setFilterStatus(true);
+      }
+   }, [fetchStatus])
+
+   useEffect(() => {
+      if(filterStatus){
+         // setFilteredResults(...combine(filterU, filterM, setFilteredResults));
+         combine(filterU, filterM, setFilteredResults)
+         // console.log(filterU)
+      }
+   }, [filterStatus])
 
    const columns = [
       { field: 'university', headerName: 'University', width: 200 },
-      { field: 'major', headerName: 'Major', width: 130 },
+      { field: 'major', headerName: 'Major', width: 200 },
       { field: 'avg', headerName: 'Admission Average', width: 200 },
       { field: 'courses', headerName: 'Required Courses', width: 200 },
+      { field: 'info', headerName: 'Info', width: 200 },
    ]
 
    return !loading ? (
@@ -74,10 +149,9 @@ function Results() {
          {selectedU.universities.length === filterU.length ? null : <p>Some universities you have searched were not included in the results as they were not found on our database.</p>}
          {selectedU ? 
          <div className="results__table">
-            <DataGrid rows={filterU} columns={columns} pageSize={5}/>
+            <DataGrid rows={filteredResults} columns={columns} pageSize={5}/>
          </div> 
          : <p>you haven't selected any universities!</p>}
-         
       </div>
    )
    : (
