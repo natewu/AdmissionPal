@@ -14,6 +14,7 @@ export default function Universities() {
    const [selection, setSelection] = useState(null);
    const dispatch = useDispatch();
    const university = useSelector(selectUniversity);
+   var [unis, setUnis] = useState([]);
 
    function handleRadio(e){
       e.preventDefault();
@@ -45,13 +46,26 @@ export default function Universities() {
       next();
       return null;
    }
+   
    const HandleAllNext = (next) => {
-      dispatch(
-         setUniversity({
-            type:'all'
-         })
-      )
-      next();
+      
+      fetch("universities")
+      .then(res => res.json())
+      .then((uni) => {
+         for(var i = 0; i < uni.length; i++){
+            unis[i] = uni[i].Uni_Name
+         }
+      })
+      .then(() => {
+         dispatch(
+            setUniversity({
+               type:'all',
+               universities: unis
+            })
+         )
+         next()
+      })
+      
       return null;
    }
 

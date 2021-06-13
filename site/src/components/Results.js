@@ -52,6 +52,7 @@ function Results() {
 
    function search(indexer, indexed, type, returnHook ){
       var results = [];
+      console.log(indexer)
       for(var selection = 0; selection < indexer.length; selection++){
          for(var filter = 0; filter < indexed.length; filter++){
             if(indexed[filter][type].toLowerCase() === indexer[selection].toLowerCase()) {
@@ -102,12 +103,11 @@ function Results() {
       var result = [];
       for(var item = 0; item < parent.length; item++){
          for(var index = 0; index < child.length; index++){
-            
-            result[index] = {
-               ...parent[index],
+            result[item] = {
+               ...parent[item],
                major: child[index].major
             }
-            console.log(result[index])
+            console.log(result[item])
          }
       }
       setFilter(result);
@@ -116,6 +116,7 @@ function Results() {
    }
 
    function filter(){
+      console.log(selectedU.universities)
       search(selectedU.universities, uni, "university", setFilterU);
       search(selectedM.majors, majorTypes, "major", setFilterM); 
    }
