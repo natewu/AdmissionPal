@@ -8,5 +8,11 @@ router.get('/', function(req, res, next) {
     !err ? res.json(results) : res.json(err);
   });
 });
+router.get('/name', function(req, res, next) {
+  var query = 'SELECT uni_name FROM universities WHERE uni_id IN (?)'
+  db.query(query, [JSON.parse(req.query.uni)], (err, results, fields) => {
+    !err ? res.json(results) : res.json(err);
+  });
+});
 
 module.exports = router;

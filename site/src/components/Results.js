@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { DataGrid } from '@material-ui/data-grid';
+import axios from "axios";
 import { useSelector } from "react-redux";
 import { selectMajor, selectUniversity } from "../utils/data";
 
 function Results() {
    const [loading, setLoading] = useState(true);
+   const [loadingRes, setLoadingRes] = useState(true);
    const [fetchStatus, setFetchStatus] = useState(false);
    const [filterStatus, setFilterStatus] = useState(false);
    const selectedU = useSelector(selectUniversity);
@@ -52,18 +54,19 @@ function Results() {
 
    function search(indexer, indexed, type, returnHook ){
       var results = [];
-      console.log(indexer)
+      // console.log(indexer)
       for(var selection = 0; selection < indexer.length; selection++){
          for(var filter = 0; filter < indexed.length; filter++){
             if(indexed[filter][type].toLowerCase() === indexer[selection].toLowerCase()) {
                results.push({
                   [type]: indexed[filter][type],
-                  info: indexed[filter].info
+                  info: indexed[filter].info,
+                  id: indexed[filter].id
                });
                // console.log(indexed[filter].university, indexer[selection]);
             }
             else{
-               console.log("nothing");
+               // console.log("nothing");
             }
          }
       }
@@ -73,16 +76,17 @@ function Results() {
             case "university":
                returnHook(
                   results.map((res, index) => ({
-                     id: index,
+                     id: res.id,
                      university: res.university,
                      info: res.info
                   }))
                );
+               // console.log(results[0].id)
                break;
             case "major":
                returnHook(
                   results.map((res, index) => ({
-                     id: index,
+                     id: res.id,
                      major: res.major,
                   }))
                );
@@ -99,7 +103,7 @@ function Results() {
       }
    }
 
-   function combine(parent, child, setFilter){
+   /* function combine(parent, child, setFilter){
       var result = [];
       var result2 = [];
       for(var item = 0; item < parent.length; item++){
@@ -127,10 +131,9 @@ function Results() {
       setFilter(result);
       // console.log(filteredResults)
       return result;
-   }
+   } */
 
    function filter(){
-      console.log(selectedU.universities)
       search(selectedU.universities, uni, "university", setFilterU);
       search(selectedM.majors, majorTypes, "major", setFilterM); 
    }
@@ -144,18 +147,27 @@ function Results() {
 
    useEffect(() => {
       if(filterStatus){
-         // setFilteredResults(...combine(filterU, filterM, setFilteredResults));
+         /* // setFilteredResults(...combine(filterU, filterM, setFilteredResults));
          combine(filterU, filterM, setFilteredResults)
-         // console.log(filterU)
+         // console.log(filterU) */
+
+         axios.get("http://localhost:3001/post?uni=["+filterU.map((uni) => uni.id)+"]&major=["+filterM.map((major) => major.id)+"]")
+         .then(res => {
+            // console.log(res.data)
+            setFilteredResults(res.data);
+            setLoadingRes(false);
+         })
+         .catch(err => console.log(err))
+
       }
    }, [filterStatus])
 
    const columns = [
-      { field: 'university', headerName: 'University', width: 200 },
-      { field: 'major', headerName: 'Major', width: 200 },
-      { field: 'avg', headerName: 'Admission Average', width: 200 },
+      { field: 'Uni_Name', headerName: 'University', width: 200 },
+      { field: 'Major_Name', headerName: 'Major', width: 200 },
+      { field: 'Admission_Avg', headerName: 'Admission Average', width: 200 },
       { field: 'courses', headerName: 'Required Courses', width: 200 },
-      { field: 'info', headerName: 'Info', width: 200 },
+      { field: 'Extra_Info', headerName: 'Info', width: 300 },
    ]
 
    return !loading ? (
@@ -164,7 +176,7 @@ function Results() {
          {selectedU.universities.length === filterU.length ? null : <p>Some universities you have searched were not included in the results as they were not found on our database.</p>}
          {selectedU ? 
          <div className="results__table">
-            <DataGrid rows={filteredResults} columns={columns} pageSize={5}/>
+            {!loadingRes ? <DataGrid rows={filteredResults} columns={columns} /> : <div className="div">loading...</div>}
          </div> 
          : <p>you haven't selected any universities!</p>}
       </div>
