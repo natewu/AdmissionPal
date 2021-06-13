@@ -1,4 +1,7 @@
-# AdmissionPal
+![image](https://user-images.githubusercontent.com/20260142/121823082-271beb80-cc60-11eb-929d-bd763ecad60b.png)
+<p align="center">
+  <strong>Admission information for Albertans has never been easier 🎓</strong>
+</p>
 
 ## MySQL Setup
 
