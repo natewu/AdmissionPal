@@ -3,7 +3,7 @@ import requests
 import csv
 
 source = requests.get(
-    "https://www.macleans.ca/education/canadian-universities-minimum-entering-grades-by-faculty/%22).text
+    "https://www.macleans.ca/education/canadian-universities-minimum-entering-grades-by-faculty/").text
 
 csv_file = open('UniData.csv', 'w')
 csv_writer = csv.writer(csv_file,lineterminator = '\n')
