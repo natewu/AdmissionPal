@@ -166,13 +166,19 @@ function Results() {
          /* // setFilteredResults(...combine(filterU, filterM, setFilteredResults));
          combine(filterU, filterM, setFilteredResults)
          // console.log(filterU) */
-         axios.get("http://localhost:3001/post?uni=["+filterU.map((uni) => uni.id)+"]&major=["+filterM.map((major) => major.id)+"]")
-         .then(res => {
-            // console.log(res.data)
-            setFilteredResults(res.data);
+         if((filterU.length && filterM.length) !== 0){
+            axios.get("http://localhost:3001/post?uni=["+filterU.map((uni) => uni.id)+"]&major=["+filterM.map((major) => major.id)+"]")
+            .then(res => {
+               // console.log(res.data)
+               setFilteredResults(res.data);
+               setLoadingRes(false);
+            })
+            .catch(err => console.log(err))
+         }
+         else{
+            setFilteredResults({universities: "error"});
             setLoadingRes(false);
-         })
-         .catch(err => console.log(err))
+         }
       }
    }, [filterStatus])
 
@@ -214,11 +220,14 @@ function Results() {
             !loadingRes ? 
             <div className="results__table">
                {/* <img className="loadLogo" src={process.env.PUBLIC_URL+ "/Logo1.svg"} alt="loading"/> */}
+               {(filteredResults.length !== 0) ?  
                <DataGrid rows={filteredResults} columns={columns} 
-               components={{
-                  Toolbar: Export
-               }}
+                  components={{
+                     Toolbar: Export
+                  }}
                />
+               : <p>error</p>
+               }
             </div>  
             : <img className="loadLogo" src={process.env.PUBLIC_URL+ "/Logo1.svg"} alt="loading"/>
          : <p>you haven't selected any universities!</p>}
@@ -239,6 +248,7 @@ const Export = () => {
       <GridToolbarContainer>
         
          <GridToolbarExport />
+         <p style={{fontSize:"12px", fontWeight:"100"}}>* = approximate</p>
          <ListIcon className="results"/>
       </GridToolbarContainer>
    )

@@ -1,3 +1,5 @@
+$light: #76e5e5;
+$medium: #66ccca;
 *{
     text-align: center;
     h1{
@@ -37,6 +39,10 @@
     .next{
         margin: 1rem;
     }
+    .MuiButton-outlinedPrimary{
+        color: $light !important;
+        border: 1px solid $light !important;
+    }
 }
 
 .content__results{
@@ -57,7 +63,7 @@
         flex-flow: column;
         
         .Mui-selected{
-            background-color:rgba(0, 206, 221, 0.055) !important;
+            background-color: rgba(118, 229, 229, 0.1) !important;
         }
         @media (min-width:600px) {
             .infoButton{
@@ -100,5 +106,14 @@
     }
 }
 .MuiAlert-filledInfo{
-    background-color: rgba(0, 206, 221) !important;
+    background-color: $light !important;
+}
+.MuiRadio-colorPrimary.Mui-checked{
+    *{
+        color: $light !important;
+        filter: opacity(0.95);
+    }
+}
+.WAMuiChipInput-underline-21:after{
+    border-bottom: 2px solid $medium !important;
 }

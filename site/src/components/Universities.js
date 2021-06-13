@@ -11,6 +11,7 @@ export default function Universities() {
    const [universities, setUniversities] = useState([])
    const [error, setError] = useState(null);
    const uniRef = useRef()
+   const input = useRef()
    const [selection, setSelection] = useState(null);
    const dispatch = useDispatch();
    const university = useSelector(selectUniversity);
@@ -72,6 +73,7 @@ export default function Universities() {
    const AutoSelect = (chips) =>{
       setUniversities(chips);
       setSelection("university");
+      uniRef.current.click();
    }
 
    return (
@@ -81,8 +83,18 @@ export default function Universities() {
          <FormControlLabel className="option" ref={uniRef} value="university" control={<Radio color="primary"/>} 
             label={
             <ChipInput
+               ref={input}
                defaultValue={university !== null ? university.universities : ""}
                onChange={(chips) => AutoSelect(chips)}
+               onClick={() => {
+                  if(selection !== "university"){
+                     uniRef.current.click();
+                     input.current.focus();
+                  }
+                  else{
+                     return null;
+                  }
+               }}
             />
             } 
          />
