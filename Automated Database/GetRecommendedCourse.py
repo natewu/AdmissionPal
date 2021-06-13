@@ -19,4 +19,3 @@ def getRecommendedCourses(Program):
     for info in titles.find_all("li"):
         output.append(info.text)
     return output
-print(getRecommendedCourses("art"))
