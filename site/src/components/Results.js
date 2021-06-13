@@ -175,9 +175,12 @@ function Results() {
          <h2>Results</h2>
          {selectedU.universities.length === filterU.length ? null : <p>Some universities you have searched were not included in the results as they were not found on our database.</p>}
          {selectedU ? 
-         <div className="results__table">
-            {!loadingRes ? <DataGrid rows={filteredResults} columns={columns} /> : <div className="div">loading...</div>}
-         </div> 
+            !loadingRes ? 
+            <div className="results__table">
+               {/* <img className="loadLogo" src={process.env.PUBLIC_URL+ "/Logo1.svg"} alt="loading"/> */}
+               <DataGrid rows={filteredResults} columns={columns} />
+            </div>  
+            : <img className="loadLogo" src={process.env.PUBLIC_URL+ "/Logo1.svg"} alt="loading"/>
          : <p>you haven't selected any universities!</p>}
       </div>
    )
