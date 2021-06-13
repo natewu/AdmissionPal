@@ -3,6 +3,15 @@
   <strong>Admission information for Albertans has never been easier 🎓</strong>
 </p>
 
+### How do you use Admission Pal? 
+Upon opening the page, it will ask what universities you are interested in, where you can list as many as you like or select the entire catalog. After you type in the majors that you are interested in viewing, the result will display a grid of the university information database to you. You are able to organize the data in different orders, such as the costs of tuition, or the average grade for the major. The website also fetches the required courses needed in order to pursue the major. 
+![unknown](https://user-images.githubusercontent.com/74692833/121824060-8846bd80-cc66-11eb-944a-2df01d897c1e.png)
+
+### Where is the Data From?
+Some of our more detailed information was hand-selected, but much was also scraped from various websites. Web scraping allows our site to be up to date with other universities without the need of maintenance costs. The sites which were used in order to retrieve most of our data can be found: 
+- https://uwaterloo.ca/future-students/admissions/admission-requirements
+- https://www.macleans.ca/hub/education-hub/
+
 ## MySQL Setup
 
 To start the MySQL server, install MySQL 5 from https://dev.mysql.com/downloads/installer/ (click "Looking for previous GA versions" for MySQL 5).
