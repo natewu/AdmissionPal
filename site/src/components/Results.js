@@ -101,13 +101,27 @@ function Results() {
 
    function combine(parent, child, setFilter){
       var result = [];
+      var result2 = [];
       for(var item = 0; item < parent.length; item++){
-         for(var index = 0; index < child.length; index++){
+         // for(var index = 0; index < child.length; index++){
+            var major = child.map((major) => ({
+               ...major
+            }))
             result[item] = {
                ...parent[item],
-               major: child[index].major
+               major: [...major]
             }
-            console.log(result[item])
+            // console.log(result[item])
+         // }
+      }
+      for(var item2 = 0; item2 < result.length; item2++){
+         console.log(result[item2].major)
+         for(var index = 0; index < result[item2].major.length; index++){
+            result2[index] = {
+               ...parent[item2],
+               major: result[item2].major[index]
+            }
+            console.log(result2[index] + "item 2")
          }
       }
       setFilter(result);
