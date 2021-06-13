@@ -9,8 +9,8 @@ Upon opening the page, it will ask what universities you are interested in, wher
 
 ### Where is the Data From?
 Some of our more detailed information was hand-selected, but much was also scraped from various websites. Web scraping allows our site to be up to date with other universities without the need of maintenance costs. The sites which were used in order to retrieve most of our data can be found: 
-https://uwaterloo.ca/future-students/admissions/admission-requirements
-https://www.macleans.ca/hub/education-hub/
+- https://uwaterloo.ca/future-students/admissions/admission-requirements
+- https://www.macleans.ca/hub/education-hub/
 
 ## MySQL Setup
 
