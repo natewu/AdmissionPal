@@ -1,8 +1,9 @@
+@use "./App.scss" as app;
 .nav{
     display: flex;
     flex-flow: row;
     padding: 0 1rem;
-    
+    justify-content: space-between;
     align-items: flex-start;
     .logo{
         max-width: 15rem;
@@ -22,5 +23,27 @@
         // flex: 1 0 0;
         height: 5rem;
         display: flex;
+        text-decoration: none;
+        *{
+            color: app.$light;
+        }
     }
+    .about{
+        display: flex;
+        align-items: center;
+        flex-flow: row;
+        justify-content: center;
+        h3{
+            margin: 0 0.5rem 0.1rem 0.5rem !important;
+            font-weight: 400;
+        }
+        margin: 0 1rem;
+
+        filter: brightness(0.90);
+        transition: filter .15s linear;
+        &:hover{
+            filter: brightness(1.1);
+        }
+    }
+
 }
