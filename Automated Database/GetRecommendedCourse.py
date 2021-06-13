@@ -6,12 +6,12 @@ def getRecommendedCourses(Program):
     dict = {"software-engineering": "software-eng",
             "art": "honours-arts",
             "commerce": "honours-arts",
+            "business": "business-admin-math",
             }
     if input in dict:
         input = dict[input]
     source = requests.get(
-    f"https://uwaterloo.ca/future-st"
-    f"udents/admissions/admission-requirements/{input}/canada/alberta/").text
+    f"https://uwaterloo.ca/future-students/admissions/admission-requirements/{input}/canada/alberta/").text
     soup = BeautifulSoup(source, 'lxml')
     content = soup.find(id="block-system-main")
     titles = content.find("div","section")
