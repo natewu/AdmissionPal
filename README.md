@@ -26,6 +26,10 @@ SOURCE C:/path/to/admissionpal_db.sql;
 ```
 The file admissionpal_db.sql is located in AdmissionPal/site/admissionpal_db.sql .
 
+Finally, in AdmissionPal/server/backend/db.js, change the password on line 7
+```password: process.env.REACT_APP_SQL_PASS```
+to the password you set when you installed MySQL.
+
 For demonstration purposes, we are providing this SQL file hardcoded with values. 90% of these values were scraped and generated with code (you can see some of this code in the "Automated Database" folder), and in the future (when exporting a .sql file for judging convenience is not needed) we would like to automatically update a MySQL database every academic year with new info from the university websites.
 
 ### Why SQL?
