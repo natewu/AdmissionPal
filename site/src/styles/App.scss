@@ -55,6 +55,21 @@
         display: flex;
         flex: 1;
         flex-flow: column;
+        
+        .Mui-selected{
+            background-color:rgba(0, 206, 221, 0.055) !important;
+        }
+        @media (min-width:600px) {
+            .infoButton{
+                display: block;
+            }
+        }
+        @media (max-width:600px) {
+            .infoButton{
+                display: none;
+            }
+        }
+
     }
     .loadLogo{
         animation: fadein 1s infinite;
@@ -68,5 +83,22 @@
         50%   { opacity: 1; }
         100%   { opacity: 0; }
     }
+    .MuiDataGrid-toolbar{
+        flex-flow: row-reverse;
+        padding: 0.5rem 0.5rem 0;
+        justify-content: space-between;
+        button{
+            color: rgb(0, 206, 221)
+        }
+        .results{
+            // justify-self: space-between;
+            margin: 0;
+            font-weight: 300;
+            margin: 0 0.5rem;
+            // flex: 1
+        }
+    }
 }
-
+.MuiAlert-filledInfo{
+    background-color: rgba(0, 206, 221) !important;
+}

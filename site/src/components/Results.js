@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid, GridToolbarExport, GridToolbarContainer } from '@material-ui/data-grid';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import Tooltip from '@material-ui/core/Tooltip';
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { selectMajor, selectUniversity } from "../utils/data";
+import ListIcon from '@material-ui/icons/List';
+import InfoIcon from '@material-ui/icons/Info';
+import {Button} from "@material-ui/core";
 
 function Results() {
    const [loading, setLoading] = useState(true);
@@ -19,6 +25,18 @@ function Results() {
    const [uni, setUni] = useState([]);
    const [majors, setMajors] = useState([]);
    const [majorTypes, setMajorsTypes] = useState([]);
+
+   const [info, setInfo] = useState(false);
+   const [message, setMessage] = useState(false);
+   
+   const handleClose = (event) => {
+      setInfo(false);
+    };
+
+    const handleClick = (uniInfo) => {
+      setInfo(true);
+      setMessage(uniInfo)
+    };
 
    useEffect(() => {
       const getData = async () => {
@@ -45,9 +63,7 @@ function Results() {
                )
             ))
             .then(() => {setFetchStatus(true)})
-            // .then(() => console.log(filterU))
-         )
-         
+         ); 
       }
       getData();
    }, [])
@@ -150,7 +166,6 @@ function Results() {
          /* // setFilteredResults(...combine(filterU, filterM, setFilteredResults));
          combine(filterU, filterM, setFilteredResults)
          // console.log(filterU) */
-
          axios.get("http://localhost:3001/post?uni=["+filterU.map((uni) => uni.id)+"]&major=["+filterM.map((major) => major.id)+"]")
          .then(res => {
             // console.log(res.data)
@@ -158,16 +173,37 @@ function Results() {
             setLoadingRes(false);
          })
          .catch(err => console.log(err))
-
       }
    }, [filterStatus])
 
    const columns = [
-      { field: 'Uni_Name', headerName: 'University', width: 200 },
-      { field: 'Major_Name', headerName: 'Major', width: 200 },
+      { 
+         field: 'Uni_Name', 
+         headerName: 'University', 
+         // flex: 0.6,
+         width: 300,
+         // resizable: true,
+         renderCell: (params) => (
+            <div style={{display:"flex", flexFlow:"row", justifyContent:"space-between", alignItems:"center", flex: 1}}>
+               {params.value}
+               <Tooltip title={ filteredResults[params.getValue(params.id, 'id') - 1 ].Uni_Info }>
+                  <Button className="infoButton"
+                     variant="outlined"
+                     color="primary"
+                     size="small"
+                     style={{ width:"1rem", minWidth:"1rem", border:"none", padding:"0", display:"flex"}}
+                     onClick={() => handleClick(filteredResults[params.getValue(params.id, 'id') - 1 ].Uni_Info)}
+                  >
+                     <InfoIcon fontSize="small" style={{color:"rgba(0, 206, 221)"}}/>
+                  </Button>
+               </Tooltip>
+            </div>
+          ),
+      },
+      { field: 'Major_Name', headerName: 'Major', width: 200},
       { field: 'Admission_Avg', headerName: 'Admission Average', width: 200 },
-      { field: 'courses', headerName: 'Required Courses', width: 200 },
-      { field: 'Extra_Info', headerName: 'Info', width: 300 },
+      // { field: 'courses', headerName: 'Required Courses', width: 200 },
+      { field: 'Extra_Info', headerName: 'Info', width: 1000 },
    ]
 
    return !loading ? (
@@ -178,15 +214,38 @@ function Results() {
             !loadingRes ? 
             <div className="results__table">
                {/* <img className="loadLogo" src={process.env.PUBLIC_URL+ "/Logo1.svg"} alt="loading"/> */}
-               <DataGrid rows={filteredResults} columns={columns} />
+               <DataGrid rows={filteredResults} columns={columns} 
+               components={{
+                  Toolbar: Export
+               }}
+               />
             </div>  
             : <img className="loadLogo" src={process.env.PUBLIC_URL+ "/Logo1.svg"} alt="loading"/>
          : <p>you haven't selected any universities!</p>}
+         <Snackbar open={info} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="info">
+               {message}
+            </Alert>
+         </Snackbar>
       </div>
    )
    : (
       <div> loading </div>
    )
 }
+
+const Export = () => {
+   return(
+      <GridToolbarContainer>
+        
+         <GridToolbarExport />
+         <ListIcon className="results"/>
+      </GridToolbarContainer>
+   )
+}
+
+function Alert(props) {
+   return <MuiAlert elevation={6} variant="filled" color="info" {...props} />;
+ }
 
 export default Results
