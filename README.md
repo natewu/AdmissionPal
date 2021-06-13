@@ -1,4 +1,4 @@
-# AdmissionPal
+![image](https://user-images.githubusercontent.com/20260142/121823082-271beb80-cc60-11eb-929d-bd763ecad60b.png)
 
 ## MySQL Setup
 
