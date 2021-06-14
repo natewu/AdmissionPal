@@ -12,6 +12,12 @@
         align-items: center;
         margin: 0 1rem;
         justify-self: center;
+        @media (min-width:600px) {
+            display: block;
+        }
+        @media (max-width:600px) {
+            display: none;
+        }
     }
     .ico{
         max-width: 3rem;
@@ -19,6 +25,7 @@
         align-items: center;
         margin: 0 0 0 2rem;
         justify-self: center;
+        
     }
     a{
         // flex: 1 0 0;
@@ -47,4 +54,29 @@
         }
     }
 
+}
+.aboutUS{
+    align-items: center;
+    p{
+        text-align: left;
+        margin: 1rem;
+    }
+    h2{
+        margin: 0.5rem;  
+    }
+    @media (min-width:600px) {
+        margin: 1rem 25vw;
+    }
+    @media (max-width:600px) {
+        margin: 1rem 3rem;
+    }
+    .github{
+        margin: 2rem;
+        img{
+            max-width: 100%;
+            height: auto;
+        }
+        // height: 2rem;
+        width: 10rem;
+    }
 }
