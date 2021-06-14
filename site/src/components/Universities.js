@@ -1,6 +1,8 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {TextField, RadioGroup, FormControlLabel, Radio, Button} from "@material-ui/core"
-import ChipInput from 'material-ui-chip-input'
+import ChipInput from 'material-ui-chip-input';
+import Chip from "@material-ui/core/Chip";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useHistory } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUniversity, setMajor, setUniversity } from "../utils/data.js";
@@ -16,6 +18,7 @@ export default function Universities() {
    const dispatch = useDispatch();
    const university = useSelector(selectUniversity);
    var [unis, setUnis] = useState([]);
+   var [unisuggest, setUnisuggest] = useState([]);
 
    function handleRadio(e){
       e.preventDefault();
@@ -70,23 +73,72 @@ export default function Universities() {
       return null;
    }
 
+   function Suggestion(){
+      fetch("universities")
+      .then(res => res.json())
+      .then((uni) => {
+         for(var i = 0; i < uni.length; i++){
+            unisuggest[i] = uni[i].Uni_Name
+         }
+      })
+   }
+
+   useEffect(() => {
+      Suggestion();
+   }, [])
+
    const AutoSelect = (chips) =>{
       setUniversities(chips);
       setSelection("university");
       uniRef.current.click();
    }
-
+   
    return (
       <div className="content">
          <h2>What universities are you interested in?</h2>
       <RadioGroup className="selection" /* value={value} */ onChange={(e) => handleRadio(e)}>
          <FormControlLabel className="option" ref={uniRef} value="university" control={<Radio color="primary"/>} 
             label={
-            <ChipInput
-               ref={input}
-               defaultValue={university !== null ? university.universities : ""}
-               onChange={(chips) => AutoSelect(chips)}
-               onClick={() => {
+               // {<ChipInput
+               // ref={input} 
+               // defaultValue={university !== null ? university.universities : ""}
+               // onChange={(chips) => AutoSelect(chips)}
+               // onClick={() => {
+               //    if(selection !== "university"){
+               //       uniRef.current.click();
+               //       input.current.focus();
+               //    }
+               //    else{
+               //       return null;
+               //    }
+               // }}
+               // />}
+               <Autocomplete
+               multiple
+               autoHighlight="true"
+               id="select-uni"
+               options={
+                  unisuggest
+               }
+               // defaultValue={((university !== null) && selection.type !== "all") ? university.universities : ""}
+               getOptionLabel={option => option}
+               renderTags={(value, getTagProps) =>
+                 value.map((option, index) => (
+                   <Chip
+                     label={<p style={{whiteSpace: 'normal'}}>{option}</p>}
+                     {...getTagProps({ index })}
+                     // disabled={index === 0}
+                     style={{height:"100%"}}
+                   />
+                 ))
+               }
+               style={{ minWidth: 300 }}
+               renderInput={params => (
+                  <TextField
+                  ref={input}
+                  {...params}
+                  // label="Search universities"
+                  onClick={() => {
                   if(selection !== "university"){
                      uniRef.current.click();
                      input.current.focus();
@@ -94,8 +146,11 @@ export default function Universities() {
                   else{
                      return null;
                   }
-               }}
-            />
+                  }}
+                  />
+               )}
+               
+               />
             } 
          />
          <FormControlLabel className="option" value="all" control={<Radio color="primary" />} label="all" />

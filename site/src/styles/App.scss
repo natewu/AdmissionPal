@@ -114,6 +114,9 @@ $medium: #66ccca;
         filter: opacity(0.95);
     }
 }
-.WAMuiChipInput-underline-21:after{
+.WAMuiChipInput-underline-21:after, .MuiInput-underline:after{
     border-bottom: 2px solid $medium !important;
+}
+.MuiFormLabel-root.Mui-focused{
+    color: $medium !important;
 }
