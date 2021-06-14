@@ -98,20 +98,20 @@ export default function Universities() {
       <RadioGroup className="selection" /* value={value} */ onChange={(e) => handleRadio(e)}>
          <FormControlLabel className="option" ref={uniRef} value="university" control={<Radio color="primary"/>} 
             label={
-               // {<ChipInput
-               // ref={input} 
-               // defaultValue={university !== null ? university.universities : ""}
-               // onChange={(chips) => AutoSelect(chips)}
-               // onClick={() => {
-               //    if(selection !== "university"){
-               //       uniRef.current.click();
-               //       input.current.focus();
-               //    }
-               //    else{
-               //       return null;
-               //    }
-               // }}
-               // />}
+               /* {<ChipInput
+               ref={input} 
+               defaultValue={university !== null ? university.universities : ""}
+               onChange={(chips) => AutoSelect(chips)}
+               onClick={() => {
+                  if(selection !== "university"){
+                     uniRef.current.click();
+                     input.current.focus();
+                  }
+                  else{
+                     return null;
+                  }
+               }}
+               />} */
                <Autocomplete
                multiple
                autoHighlight="true"
@@ -119,7 +119,7 @@ export default function Universities() {
                options={
                   unisuggest
                }
-               // defaultValue={((university !== null) && selection.type !== "all") ? university.universities : ""}
+               defaultValue={((university !== null)) ? university.universities : []}
                getOptionLabel={option => option}
                
                renderTags={(value, getTagProps) =>
