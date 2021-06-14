@@ -1,17 +1,38 @@
 from bs4 import BeautifulSoup
 import requests
-import re
+import csv
 
-#"all",
-#"University",
-#"Minimum entering grade: Arts",
-#"Minimum entering grade: Science",
-#"Minimum entering grade: Commerce",
-#"Minimum entering grade: Engineering"
+UniName = open("uni_names.txt", "r")
+nameList = []
+AverageDict = dict()
+#basic format for scraping
+def basicScrape(soup,id):
+    output = []
+    for table in soup.find("tbody").find_all("tr"):
+        wholetable = table.text.split("\n")
+        wholetable.pop(0)
+        wholetable.pop(-1)
+        wholetable[0] = wholetable[0].replace("�","e").replace("é","e").replace("'","")
+        for index in range(len(wholetable)):
+            wholetable[index] = wholetable[index].replace("*", "")
+        output.append(wholetable)
+        if(id == "average"):
+            AverageDict[wholetable[0].replace("University","").replace("of","").replace(" ","")] = wholetable[1]
+    return output
 
-#"average", 2: average
+#Function to get rank of Major:
+def getRanking(program):
+    Program = program.lower().replace(" ", "-")
+    programranking = f"https://www.macleans.ca/education/canadas-best-university-{Program}-programs-2021-rankings/"
 
-#Function to get averages and rankings:
+    request = requests.get(programranking)
+    if request.status_code == 200:
+        source = requests.get(programranking).text
+    soup = BeautifulSoup(source, 'lxml')
+    output = basicScrape(soup)
+    return output
+
+#Function to get averages:
 def getRecommendedAllAverages(command):
     #examples: print(getRecommendedAllAverages("average")), ouput: waterloo: 90%, Calgary: 85%....
     #examples: print(getRecommendedAllAverages("computer science")), ouput: 1,waterloo,1,1, ....
@@ -21,26 +42,12 @@ def getRecommendedAllAverages(command):
     link = "https://www.macleans.ca/education/what-grades-do-i-need-to-get-into-canadian-universities/"
     if command in dict:
         link = dict[command]
-    Program = command.lower().replace(" ", "-")
-    programranking = f"https://www.macleans.ca/education/canadas-best-university-{Program}-programs-2021-rankings/"
-
-    request = requests.get(programranking)
-    if request.status_code == 200:
-        source = requests.get(programranking).text
-    else:
-        source = requests.get(link).text
-
+    source = requests.get(link).text
     soup = BeautifulSoup(source, 'lxml')
-    output = []
-    for table in soup.find("tbody").find_all("tr"):
-        wholetable = table.text.split("\n")
-        wholetable.pop(0)
-        wholetable.pop(-1)
-        wholetable[0] = wholetable[0].replace("�","e").replace("é","e")
-        for index in range(len(wholetable)):
-            wholetable[index] = wholetable[index].replace("*", "")
-        output.append(wholetable)
+
+    output = basicScrape(soup,command)
     return output
+
 #When inputting, put "average" or "all" to get the information documented above
 #when you put in a major that exists in ranking, it will output a:
 #1 ranking, university, Program Reputation, Research Reputation,
@@ -68,12 +75,12 @@ def getRecommendedCourses(Program):
         output.append(info.text)
     return output
 
-def getRecommendedCourses(university):
-    university = university.split(" ")
+def getTuition(universityname):
+    university = universityname.split(" ")
     searchString = ""
     for i in range(len(university)):
         university[i] = university[i]
-        university[i] = (university[i][0].upper() + university[i][1:]).replace("Of", "of")
+        university[i] = (university[i][0].upper() + university[i][1:]).replace("Of", "of").replace(".","")
         addon = "-"
         if(i == len(university) - 1):
             addon = ""
@@ -81,7 +88,52 @@ def getRecommendedCourses(university):
     source = requests.get(
         f"https://www.macleans.ca/schools/{searchString}/").text
     soup = BeautifulSoup(source, 'lxml')
-    content = soup.find("div","single-article-text")
-    tuition = soup.body.findAll(text='$7,041')
-    print(tuition)
-print(getRecommendedCourses("university of calgary"))
+    output = ""
+    try:
+        content = soup.find("div","single-article-text").text
+        index = 1
+        for line in content.split("\n"):
+            if index == 0:
+                output = line
+                index = -1
+            if line.startswith("Tuition"):
+                index = 0
+        output = output.replace("$","").replace(",","").split(" ")
+        output = output[0]
+    except:
+        print("cannot be found")
+    return [output,universityname]
+
+def arrayToCSV(Parent,Map1,Map2):
+    csv_file = open("UniData.csv",'w')
+    csv_writer = csv.writer(csv_file,lineterminator='\n')
+    csv_writer.writerow(["Uni","Art","Science","Business","Engineering","Average","Tuition"])
+    for i in range(len(Parent)):
+        row1 = Parent[i]
+        uniname = row1[0].replace(" ", "")
+        average = Map1.get(uniname)
+        tuition = Map2.get(uniname)
+        output = []
+        for element in row1:
+            output.append(element)
+        output.append(average)
+        output.append(tuition)
+        csv_writer.writerow(output)
+    csv_file.close()
+
+
+ListOfTuitions = []
+MainAverages = []
+Averages = []
+tuitionDict = dict()
+for x in UniName:
+    value = x.replace("\n", "")
+    tuition, name = getTuition(value)
+    ListOfTuitions.append(tuition)
+    tuitionDict[name.replace("University","").replace("of","").replace(" ","")] = tuition
+UniName.close()
+
+MainAverages = getRecommendedAllAverages("all")
+Averages = getRecommendedAllAverages("average")
+
+arrayToCSV(MainAverages,AverageDict,tuitionDict)
