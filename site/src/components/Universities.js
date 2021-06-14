@@ -87,10 +87,9 @@ export default function Universities() {
       Suggestion();
    }, [])
 
-   const AutoSelect = (chips) =>{
+   const AutoSelect = (e, chips) =>{
       setUniversities(chips);
       setSelection("university");
-      uniRef.current.click();
    }
    
    return (
@@ -122,22 +121,22 @@ export default function Universities() {
                }
                // defaultValue={((university !== null) && selection.type !== "all") ? university.universities : ""}
                getOptionLabel={option => option}
+               
                renderTags={(value, getTagProps) =>
                  value.map((option, index) => (
                    <Chip
                      label={<p style={{whiteSpace: 'normal'}}>{option}</p>}
                      {...getTagProps({ index })}
-                     // disabled={index === 0}
                      style={{height:"100%"}}
                    />
                  ))
                }
+               onChange={AutoSelect}
                style={{ minWidth: 300 }}
                renderInput={params => (
                   <TextField
                   ref={input}
                   {...params}
-                  // label="Search universities"
                   onClick={() => {
                   if(selection !== "university"){
                      uniRef.current.click();
