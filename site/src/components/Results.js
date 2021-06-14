@@ -167,7 +167,7 @@ function Results() {
          combine(filterU, filterM, setFilteredResults)
          // console.log(filterU) */
          if((filterU.length && filterM.length) !== 0){
-            console.log(filterM.length)
+            // console.log(filterM.length)
             axios.get("http://localhost:3001/post?uni=["+filterU.map((uni) => uni.id)+"]&major=["+filterM.map((major) => major.id)+"]")
             .then(res => {
                // console.log(res.data)
