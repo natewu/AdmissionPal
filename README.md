@@ -32,7 +32,7 @@ In AdmissionPal/server/backend/db.js, change the password on line 7
 
 to the password you set when you installed MySQL.
 
-Finally, open the file C:/Program Files/MySQL/MySQL Server 5.5/my.ini(or wherever you installed MySQL server) and change both lines of "port=3306" to "port=3300".
+Finally, open the file C:/Program Files/MySQL/MySQL Server 5.5/my.ini(or wherever you installed MySQL server) and change both lines of "port=3306" to "port=3300". Alternatively, if you dont feel like doing it, navigate over to the ``/server/backend/db.js`` file and replace ``port:"3300"`` with `` port:"3306"``. Here is where you will also find the login user ``root``, if you are not using this user, feel free to change it.
 
 For demonstration purposes, we are providing this SQL file hardcoded with values. 90% of these values were scraped and generated with code (you can see some of this code in the "Automated Database" folder), and in the future (when exporting a .sql file for judging convenience is not needed) we would like to automatically update a MySQL database every academic year with new info from the university websites.
 
