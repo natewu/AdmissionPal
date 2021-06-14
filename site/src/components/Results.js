@@ -210,7 +210,7 @@ function Results() {
       { field: 'Major_Name', headerName: 'Major', width: 200},
       { field: 'Admission_Avg', headerName: 'Admission Average', width: 200 },
       // { field: 'courses', headerName: 'Required Courses', width: 200 },
-      { field: 'Extra_Info', headerName: 'Info', width: 1000 },
+      { field: 'Extra_Info', headerName: 'Required Courses', width: 1000 },
    ]
 
    return !loading ? (
