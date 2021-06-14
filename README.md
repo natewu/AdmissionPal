@@ -28,11 +28,11 @@ The file admissionpal_db.sql is located in AdmissionPal/site/admissionpal_db.sql
 
 In AdmissionPal/server/backend/db.js, change the password on line 7
 
-```password: process.env.REACT_APP_SQL_PASS```
+```password: process.env.REACT_APP_SQL_PASS``` -> alternatively go to the **node** section to set up a ``.env`` file.
 
 to the password you set when you installed MySQL.
 
-Finally, open the file C:/Program Files/MySQL/MySQL Server 5.5/my.ini and change both lines of "port=3306" to "port=3300".
+Finally, open the file C:/Program Files/MySQL/MySQL Server 5.5/my.ini(or wherever you installed MySQL server) and change both lines of "port=3306" to "port=3300".
 
 For demonstration purposes, we are providing this SQL file hardcoded with values. 90% of these values were scraped and generated with code (you can see some of this code in the "Automated Database" folder), and in the future (when exporting a .sql file for judging convenience is not needed) we would like to automatically update a MySQL database every academic year with new info from the university websites.
 
@@ -52,17 +52,24 @@ Install node.js (LTS release) from https://nodejs.org/en/ with all packages and 
 - One in AdmissionPal/server
 - One in AdmissionPal/site
 
-In AdmissionPal/server and AdmissionPal/site, run the command
+In the ``/server`` and ``/site`` directories, run the command
 
-```npm i```
+```npm i``` to install all dependencies
 
-In AdmissionPal, run the command
+In any directory, run the command
 
-```npm i nodemon -g```
+```npm i nodemon -g``` to install nodemon globally(allows hotreload for express)
 
-Finally, in AdmissionPal/server run the command
+Now, create a ``.env`` file in the root of ``/server``, this will allow you to enter in your MYSQL server login details. Use the format: 
+```
+REACT_APP_SQL_PASS = "YOUR PASSWORD"
+PORT = "3001" //this specifies the port for the express server. Note: if you change this, you must also change it in the /site/package.json's proxy.
+```
 
-```npm start```
+Finally, in the ``/server`` directory run the command
+
+```npm start``` to start the web app.
+Note: There is no need to run ``start`` in the ``/site`` directory as we are using ``concurrently`` to run both server and site at the same time.
 
 
 VOILA! AdmissionPal should be running. We're sorry that you had to set this up yourself, however we did not have credit cards to give website hosts that work for free/cheap with node.js, react, and MySQL :)
