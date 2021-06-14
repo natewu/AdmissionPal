@@ -26,9 +26,13 @@ SOURCE C:/path/to/admissionpal_db.sql;
 ```
 The file admissionpal_db.sql is located in AdmissionPal/site/admissionpal_db.sql .
 
-Finally, in AdmissionPal/server/backend/db.js, change the password on line 7
+In AdmissionPal/server/backend/db.js, change the password on line 7
+
 ```password: process.env.REACT_APP_SQL_PASS```
+
 to the password you set when you installed MySQL.
+
+Finally, open the file C:/Program Files/MySQL/MySQL Server 5.5/my.ini and change both lines of "port=3306" to "port=3300".
 
 For demonstration purposes, we are providing this SQL file hardcoded with values. 90% of these values were scraped and generated with code (you can see some of this code in the "Automated Database" folder), and in the future (when exporting a .sql file for judging convenience is not needed) we would like to automatically update a MySQL database every academic year with new info from the university websites.
 
@@ -40,3 +44,25 @@ We considered using JSON instead of an SQL database to organize our data because
 - SQL makes it easier to edit large amounts of existing organized data
 
 Overall, an SQL database is MUCH more scalable than JSON and would almost definitely be used in a final product of AdmissionPal
+
+## Node setup
+
+Install node.js (LTS release) from https://nodejs.org/en/ with all packages and three command lines
+- One command line in AdmissionPal
+- One in AdmissionPal/server
+- One in AdmissionPal/site
+
+In AdmissionPal/server and AdmissionPal/site, run the command
+
+```npm i```
+
+In AdmissionPal, run the command
+
+```npm i nodemon -g```
+
+Finally, in AdmissionPal/server run the command
+
+```npm start```
+
+
+VOILA! AdmissionPal should be running. We're sorry that you had to set this up yourself, however we did not have credit cards to give website hosts that work for free/cheap with node.js, react, and MySQL :)
