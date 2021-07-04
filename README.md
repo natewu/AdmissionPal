@@ -75,6 +75,6 @@ Note: There is no need to run ``start`` in the ``/site`` directory as we are usi
 VOILA! AdmissionPal should be running. We're sorry that you had to set this up yourself, however we did not have credit cards to give website hosts that work for free/cheap with node.js, react, and MySQL :)
 
 ## Awards
-###Mayor's Youth Council 2021 Hackathon
+### Mayor's Youth Council 2021 Hackathon
 - 1st Place
 - Best Tech Award
